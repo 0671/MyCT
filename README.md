@@ -72,5 +72,5 @@ lib/core/setting.py 下
 
 反馈
 ---
-Mail：h.vi@qq.com
+Mail：h.vi@qq.com  
 或者[issue](https://github.com/0671/MyCT/issues/new)、PR
