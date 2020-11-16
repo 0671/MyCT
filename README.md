@@ -1,4 +1,4 @@
-# MyCT(My *Concurrent Toolkit*)<img src="docx\ico.png" width="100px" /> 
+# MyCT(My *Concurrent Toolkit*) <img src="docx/ico.png" width="100px" /> 
 
 [![Python 2.7](docx/python-2.7-green.svg)](https://www.python.org/) [![License](docx/license-GPLv2-red.svg)](docx/LICENSE.txt) 
 基于**Xyntax的[POC-T](https://github.com/Xyntax/POC-T)** 进行个人重构。
@@ -12,7 +12,7 @@
 
 程序架构
 ---
-![architecture](docx\architecture.jpg)
+![architecture](docx/architecture.jpg)
 
 
 特点
@@ -41,7 +41,7 @@ eg：
 
 模块编写
 ---
-位于promodule\或premodule\下，新建py文件：
+位于promodule/或premodule/下，新建py文件：
 ```
 class c2Class(object):
 	def __init__(self):
@@ -64,7 +64,7 @@ class c2Class(object):
 
 程序设置
 ---
-lib\core\setting.py 下
+lib/core/setting.py 下
 并发数 **CONCURRENT_NUM**  默认为 50
 并发模块类名称 **CLASSNAME** 默认为 c2Class
 并发模块类的并发函数名称 **FUNCNAME **默认为 c2Func
@@ -73,4 +73,4 @@ lib\core\setting.py 下
 反馈
 ---
 Mail：h.vi@qq.com
-或者issue、PR
+或者[issue](https://github.com/0671/MyCT/issues/new)、PR
