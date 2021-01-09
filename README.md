@@ -1,17 +1,14 @@
 # MyCT(My *Concurrent Toolkit*) <img src="https://github.com/0671/MyCT/blob/main/docx/ico.png" width="100px" /> 
 
 [![Python 2.7](https://github.com/0671/MyCT/blob/main/docx/python-2.7-green.svg)](https://www.python.org/) [![License](https://github.com/0671/MyCT/blob/main/docx/license-GPLv2-red.svg)](https://github.com/0671/MyCT/blob/main/docx/LICENSE.txt)   
-基于**Xyntax的[POC-T](https://github.com/Xyntax/POC-T)** 进行个人重构。  
+基于**Xyntax的[POC-T](https://github.com/Xyntax/POC-T)** 进行个人重构。
 用于安全运维中的批量PoC、子域发现与端口扫描等并发任务。   
 
 
 声明
 ---
-<<<<<<< HEAD
 本工具仅用于个人安全研究学习。由于传播、利用本工具而造成的任何直接或者间接的后果及损失，均由使用者本人负责，工具作者不为此承担任何责任。
-=======
 本工具仅用于个人安全研究学习。由于传播、利用本工具而造成的任何直接或者间接的后果及损失，均由使用者本人负责，工具作者不为此承担任何责任。  
->>>>>>> 0236c8ba63ed25c7b585a481d1d6e6081bd6132e
 
 
 程序架构
@@ -21,15 +18,12 @@
 
 特点
 ---
-<<<<<<< HEAD
 - 高并发（线程或协程）
 - 支持多模块、双步骤执行
 - 模块编写快捷方便
-=======
 - 高并发（线程或协程）  
 - 支持多模块、双步骤执行  
 - 模块编写快捷方便且高自由度(eg:ljjsdb模块逻辑来源于[subDomainsBrute](https://github.com/lijiejie/subDomainsBrute)  
->>>>>>> 0236c8ba63ed25c7b585a481d1d6e6081bd6132e
 
 
 安装
@@ -63,39 +57,33 @@ class c2Class(object):
 ```
 其中：
 - 类名`c2Class`、方法名`c2Func`，一般不可以改变，必须使用该名称定义类与方法。
-<<<<<<< HEAD
 - `c2Class`的 `__init__`方法一般放置一些通数据，如漏洞名称等。
 - `c2Class`的 `c2Func`方法一般放置需要并发的代码（PoC逻辑、端口扫描等）。
 - 返回**状态码**、**返回数据**：
   - 状态码为int型，有4种：0-失败、1-成功、-1-重试、10-成功且增加测试。
   - 返回数据可以是任意类型（必须实现了**`__str__`方法**，如果需要设置目标优先级，还需要实现**`__lt__`方法**），也可以是list类型，list元素需符合以上要求。
-=======
 - `c2Class`的 `__init__`方法一般放置一些通用数据，如漏洞名称、漏洞payload等。
 - `c2Class`的 `c2Func`方法一般放置需要并发的代码（验证逻辑、端口扫描等）。
 - 返回**状态码**、**返回数据**：
   - 状态码为int型，有4种：0-失败、1-成功、-1-重试、10-成功且重试。
   - 返回数据可以是任意类型（必须实现了`__str__`方法，如果需要设置目标优先级，还需要实现`__lt__`方法），也可以是list类型，list元素需符合以上要求
->>>>>>> 0236c8ba63ed25c7b585a481d1d6e6081bd6132e
 
 更多详情可查看premodules或pocmodules目录下的`demo.py`。
 
 
 程序设置
 ---
-<<<<<<< HEAD
 lib/core/setting.py 下
 并发数 **CONCURRENT_NUM**  默认为 50
 并发模块类名称 **CLASSNAME** 默认为 c2Class
 并发模块类的并发函数名称 **FUNCNAME **默认为 c2Func
-=======
-lib/core/setting.py 下  
-并发数 **CONCURRENT_NUM**  默认为 50   
-并发模块类名称 **CLASSNAME** 默认为 c2Class  
+lib/core/setting.py 下 
+并发数 **CONCURRENT_NUM**  默认为 50
+并发模块类名称 **CLASSNAME** 默认为 c2Class 
 并发模块类的并发函数名称 **FUNCNAME** 默认为 c2Func  
->>>>>>> 0236c8ba63ed25c7b585a481d1d6e6081bd6132e
 
 
 反馈
 ---
-Mail：h.vi@qq.com  
+Mail：h.vi@qq.com 
 或者[issue](https://github.com/0671/MyCT/issues/new)、PR
