@@ -29,11 +29,7 @@ class c2Class(object):
 			url=target.strip('/')+self.vulpath
 			resp=requests.get(url=url,verify=False,timeout=2)
 			if self.flag in resp.text and not (self.recovered1 == resp.status_code or self.recovered2 in resp.text):
-<<<<<<< HEAD
-				returnData='%s is bad.The vuln is CMXT5-2019-0002.The '\
-=======
-				returnData='%s is bad.The vuln is CMXT5-2019-0002.The /'
->>>>>>> 0236c8ba63ed25c7b585a481d1d6e6081bd6132e
+				returnData='%s is bad.The vuln is CMXT5-2019-0002.The /'\
 				'payloa is [%s], the result is [%s].'%(target.strip('/'),url,resp.text.strip()) #
 				status=1
 		except Exception as e:
