@@ -53,7 +53,7 @@ def testFofa(_str):
 	resp=requests.get(url)
 	authData=json.loads(resp.content)
 	if 'error' in authData:
-		errMsg="FOFA API is not available. Please check the FOFA configuration(email,key) located in lib/code/setting.py"%(fn,fp)
+		errMsg="FOFA API is not available. Please check the FOFA configuration(email,key) located in lib/code/setting.py"
 		raise argparse.ArgumentTypeError(errMsg)
 	if authData['isvip'] == False and authData['fcoin']==0:
 		errMsg="FOFA API is not available. Because you are no VIP users and FOFA coin is not enough!"
