@@ -22,8 +22,7 @@
 - 支持多模块、双步骤执行
 - 模块编写快捷方便
 - 高并发（线程或协程）  
-- 支持多模块、双步骤执行  
-- 模块编写快捷方便且高自由度(eg:ljjsdb模块逻辑来源于[subDomainsBrute](https://github.com/lijiejie/subDomainsBrute)  
+- 模块编写快捷方便且高自由度(eg:ljjsdb模块逻辑来源于[subDomainsBrute](https://github.com/lijiejie/subDomainsBrute))  
 
 
 安装
