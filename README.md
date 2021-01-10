@@ -63,10 +63,10 @@ class c2Class(object):
 
 程序设置
 ---
-lib/core/setting.py 下
-并发数 **CONCURRENT_NUM**  默认为 50
-并发模块类名称 **CLASSNAME** 默认为 c2Class
-并发模块类的并发函数名称 **FUNCNAME **默认为 c2Func
+lib/core/setting.py 下  
+并发数 **CONCURRENT_NUM**  默认为 50  
+并发模块类名称 **CLASSNAME** 默认为 c2Class   
+并发模块类的并发函数名称 **FUNCNAME **默认为 c2Func  
 
 反馈
 ---
