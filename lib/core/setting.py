@@ -25,6 +25,15 @@ RELATIVE_PATH = {
 'OUTPUT':'output',
 'DATA':'data'}
 
+# 使用API所需要的数据
+API_KEY= {
+	'Fofa':{
+	'email':'xxx@email.com',
+	'key':'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+	'size':100 # 【普通会员】免费前100条/次 【高级会员】免费前10000条/次 【企业会员】免费前100,000条/次 check in https://fofa.so/static_pages/vip
+	}
+}
+
 # 图标
 BANNER ='''
 \033[04;31m    __  ___      ____________  \033[0m

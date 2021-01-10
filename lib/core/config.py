@@ -106,17 +106,20 @@ def targetRegister(args):
 	def _iprange():
 		conf['TARGET_TYPE'] = TARGET_TYPE.IPRANGE
 		conf['TARGET'] = args.target_iprange
-	_fun=[_single,_file,_network,_iprange] # 函数列表
-	checkList=[args.target_single,args.target_file,args.target_network,args.target_iprange]
+	def _fofa():
+		conf['TARGET_TYPE'] = TARGET_TYPE.FOFA
+		conf['TARGET'] = args.target_fofa
+	_fun=[_single,_file,_network,_iprange,_fofa] # 函数列表
+	checkList=[args.target_single,args.target_file,args.target_network,args.target_iprange,args.target_fofa]
 	# _fun中的元素顺序与checkList的元素顺序都是相关联的，一一对应的
 	seted,index=ValueInfoInList(checkList,None,3)
 	if seted == 1: # 设置了一个值
 		_fun[index]()
 	elif seted > 1: # 设置了多个值
-		msg='Too more options in [-iS|iF|-iN|-iR]'
+		msg='Too more options in [-iS|iF|-iN|-iR|-qF]'
 		sys.exit(logger.error(msg))
 	else: # 未设置值
-		msg='Too few options in [-iS|iF|-iN|-iR]. Please use [-iS|iF|-iN|-iR] to set your target'
+		msg='Too few options in [-iS|iF|-iN|-iR|-qF]. Please use [-iS|iF|-iN|-iR|-qF] to set your target'
 		sys.exit(logger.error(msg))
 
 def outputRegister(args):

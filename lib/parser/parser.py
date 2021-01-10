@@ -4,11 +4,11 @@ import sys
 import time
 from lib.core.setting import VERSION
 from lib.core.data import logger
-from lib.parser.hander import concuNum,fileNameOfPocM,fileNameOfPreM,fileNameOfTgt,myActionDebug
+from lib.parser.hander import concuNum,fileNameOfPocM,fileNameOfPreM,fileNameOfTgt,testFofa,myActionDebug
 from lib.core.static import CUSTOM_LOGGING
 from lib.core.setting import CONCURRENT_NUM
 
-usage='''python MyCT.py [-eT|-eG] [-pm] [-m] [-iS|iF|-iN|-iR] [-o] [msic]
+usage='''python MyCT.py [-eT|-eG] [-pm] [-m] [-iS|iF|-iN|-iR|-qF] [-o] [msic]
 
 Example:
 python MyCT.py -m demo -iS 1.1.1.1 -o
@@ -66,6 +66,10 @@ def parseArgs():
 	TARGET.add_argument('-iR',type=str,
 		dest='target_iprange',metavar='IP-IP',
 		help='Load the target from the ip range (e.g 10.1.1.1-10.1.1.125)'
+		)
+	TARGET.add_argument('-qF',type=testFofa,
+		dest='target_fofa',metavar='QUERY',
+		help='Query data from Fofa API (e.g domain="fofa.so")'
 		)
 
 	# 输出结果参数组

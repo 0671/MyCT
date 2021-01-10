@@ -23,6 +23,9 @@ class TARGET_TYPE:
 	FILE = 1
 	NETWORK = 2
 	IPRANGE = 3
+	FOFA = 4
+	SHODAN = 5
+	ZOOMEYE = 6
 
 # 并发函数返回状态
 class RETURN_STATUS:

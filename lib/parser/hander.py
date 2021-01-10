@@ -2,6 +2,7 @@
 import os
 import argparse
 from lib.core.log import DEBUG
+from lib.core.setting import API_KEY
 from lib.core.data import paths
 
 
@@ -41,6 +42,23 @@ def isFile(fn,fp):
 		errMsg="Cannot find the file named '%s' under %s"%(fn,fp)
 		raise argparse.ArgumentTypeError(errMsg)
 	return fullPath
+
+# 检测Fofa api是否可用
+def testFofa(_str):
+	query=_str
+	email=API_KEY['Fofa']['email']
+	key=API_KEY['Fofa']['key']
+	url="https://fofa.so/api/v1/info/my?email=%s&key=%s"%(email,key)
+	import requests,json
+	resp=requests.get(url)
+	authData=json.loads(resp.content)
+	if 'error' in authData:
+		errMsg="FOFA API is not available. Please check the FOFA configuration(email,key) located in lib/code/setting.py"%(fn,fp)
+		raise argparse.ArgumentTypeError(errMsg)
+	if authData['isvip'] == False and authData['fcoin']==0:
+		errMsg="FOFA API is not available. Because you are no VIP users and FOFA coin is not enough!"
+		raise argparse.ArgumentTypeError(errMsg)
+	return query
 
 # 自定义一个Action类
 # 自定义 action 方法需要继承自 argparse.Action 类,并且实现一个 __call__ 方法

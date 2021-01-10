@@ -6,7 +6,7 @@ import os
 from thirdparty import IPy
 from lib.core.common import intRange
 from lib.core.data import prepare,conf,logger
-from lib.core.setting import CLASSNAME,FUNCNAME
+from lib.core.setting import CLASSNAME,FUNCNAME,API_KEY
 from lib.core.static import CUSTOM_LOGGING,TARGET_TYPE,MODULE_TYPE
 
 
@@ -47,15 +47,32 @@ def loadTarget():
 		except ValueError as e:
 			errMsg = "Invalid IP-Range : %s .The correct IP-Range is such as : 192.168.1.1-192.168.2.1"%conf['TARGET']
 			sys.exit(logger.error(errMsg))
-
+	def _fofa(): # 从Fofa API查询，获取目标
+		import requests,json,base64
+		query=conf['TARGET']
+		qbase64=base64.b64encode(query)
+		email=API_KEY['Fofa']['email']
+		key=API_KEY['Fofa']['key']
+		size=API_KEY['Fofa']['size']
+		url="https://fofa.so/api/v1/search/all?email=%s&key=%s&qbase64=%s&size=%s"%(email,key,qbase64,size)
+		try:
+			resp=requests.get(url)
+			queryResults=json.loads(resp.content) # {u'results': [[u'vulfocus.fofa.so', u'118.193.36.37', u'80'], [u'https://www.fofa.so', u'36.102.212.81', u'443']], u'mode': u'extended', u'error': False, u'query': u'domain="fofa.so"', u'page': 1, u'size': 10}
+			if 'errmsg' in queryResults:
+				raise Exception(queryResults['errmsg'])
+			server=[i[0] for i in queryResults['results']] # [u'vulfocus.fofa.so', u'https://www.fofa.so']
+			for s in server:
+				prepare['allTarget'].add(s)
+		except Exception as e:
+			errMsg = "Query api data occur exception. Exception :%s"%e
+			sys.exit(logger.error(errMsg))
 	# _func是一个方法列表，方法的下标和lib\core\static.py的TARGET_TYPE内的元素值一一对应
-	_func = [_single,_file,_network,_iprange]
+	_func = [_single,_file,_network,_iprange,_fofa]
 	_func[conf['TARGET_TYPE']]() # 调用对应目标类型的处理目标方法
-
 	msg = 'Successfully loaded all targets'
 	logger.log(CUSTOM_LOGGING.SUCCESS,msg)
 
-# 载入模块的底层方法
+# 载入块的底层方法
 def _loadModule(mType,mList,mNum): # mType:模块类型 mList:模块信息列表 mNum:模块数
 	prepare[mType] = []
 	for mInfo in mList:
