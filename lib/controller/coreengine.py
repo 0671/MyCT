@@ -1,13 +1,19 @@
 # coding:utf-8
+# 以下3行是为了协程模式。为什么这3行代码要放在代码最前面 而不是放在需要调用gevent前的地方，因为py3要求这3行代码必须在最前面，py2无这要求。
+# 20210116 这3行代码放在前面运行，win10运行了，一段时间后会奔溃。。。
+# import gevent
+# from gevent import monkey # gevent需要修改python自带的一些标准库,以达到IO阻塞时可以切换协程运行的目的,这一过程通过monkey patch完成
+# monkey.patch_all()
 import time
 import threading
 import traceback
-import Queue
+try:import queue as Queue # 兼容py2、3
+except:import Queue
+import func_timeout # 为了给c2Class文件中的函数限时所需
 from lib.core.data import conf,logger,runtime,prepare
 from lib.core.static import CUSTOM_LOGGING,ENGINE_MODE,RETURN_STATUS
 from lib.core.common import threadLock,printToStdout,callStack
 from thirdparty.terminal import get_terminal_size
-
 
 # 并发引擎初始化,各种变量生成与赋值
 def initCoreEngine(initFunc):
@@ -36,6 +42,7 @@ def initCoreEngine(initFunc):
 
 # 扫描函数
 def scan(resultHandle,cid):
+	# print(cid)
 	c2Func = runtime['c2Func']
 	# 循环获得目标并处理
 	while runtime['nowWait'] != runtime['allWait'] or runtime['allTarget'].qsize()>0: # 并没有全部scan方法都在等待
@@ -55,10 +62,13 @@ def scan(resultHandle,cid):
 			resultHandle(tgt,status,returnData) # 执行不同类型引擎所专用的结果处理方法
 			if status == RETURN_STATUS.SUCCESS or status == RETURN_STATUS.MORETRY:
 				modifyFoundCount() # 增加已出现数
+		except func_timeout.exceptions.FunctionTimedOut as e: # 在c2Class文件中 导入模块func_timeout，并在对应函数前使用装饰器 @func_timeout.func_set_timeout(3) 可以限制对应函数运行时间为3秒
+			pass
 		except Exception as e:
 			runtime['handleIsError'] = True
 			runtime['errMsg'] = traceback.format_exc() # 获得异常回溯信息
 			runtime['isContinue'] = False
+
 		modifyScannedCount() # 增加已扫描数
 		printEngineState() # 打印引擎状态
 	
@@ -75,13 +85,13 @@ def runCoreEngine(resultHandle,endFunc):
 		# 生成扫描线程集
 		threads=[threading.Thread(target=scan,args=(resultHandle,i),name=str(i)) for i in range(runtime['concurrentNum'])]
 		# 扫描线程集的线程中依次执行setDaemon(True)-设置主线程为子线程的守护线程、start()
-		map(lambda t:t.setDaemon(True) == t.start(), threads) # ==的意义：使得该匿名函数可以依次运行t.setDaemon(True)与t.start()
-		# 上行代码等于以下代码
-		# for i in  range(runtime['concurrentNum']):
-		# 	t=threading.Thread(target=scan,args=(resultHandle,i),name=str(i))
-		# 	t.setDaemon(True)
-		# 	t.start()
-
+		for i in  range(runtime['concurrentNum']):
+			t=threading.Thread(target=scan,args=(resultHandle,i),name=str(i))
+			t.setDaemon(True)
+			t.start()
+		# 上行代码等于以下代码（仅适用于py2，py3更新了map方法）
+		# map(lambda t:t.setDaemon(True)==t.start(),threads) # ==的意义：使得该匿名函数可以依次运行t.setDaemon(True)与t.start()
+		
 		# 该while循环的作用：
 		# 使得主线程在除了 情况1)扫描线程集内的线程全部停止(无scan运行) 或者 情况2)未全部停止,而引擎继续运行标志为假 
 		# 的情况下,持续等待(time.sleep)   
@@ -99,10 +109,8 @@ def runCoreEngine(resultHandle,endFunc):
 	# 协程模式下
 	elif runtime['engineMode'] == ENGINE_MODE.GEVENT:
 		import gevent
-		# gevent需要修改python自带的一些标准库,以达到IO阻塞时可以切换协程运行的目的,这一过程通过monkey patch完成
-		from gevent import monkey
+		from gevent import monkey # gevent需要修改python自带的一些标准库,以达到IO阻塞时可以切换协程运行的目的,这一过程通过monkey patch完成
 		monkey.patch_all()
-
 		while runtime['allTarget'].qsize() > 0 and runtime['isContinue'] == True:
 			gls=[] # gevent-lists 协程集
 			for i in range(runtime['concurrentNum']): # 在并发数内
@@ -117,6 +125,7 @@ def runCoreEngine(resultHandle,endFunc):
 	printToStdout('\n')
 	# 进行错误信息输出
 	if 'errMsg' in runtime.keys(): # 如果runtime设置了errMsg键
+		# logger.error('111111111111111111111111111111111111111111111111111111111111111111')
 		logger.error(runtime['errMsg'])
 	endFunc() # 执行不同类型引擎所专用的结束方法
 	logger.log(CUSTOM_LOGGING.SUCCESS,'Complete concurrency of c2Func of the module: [%s]'%runtime['moduleName'])

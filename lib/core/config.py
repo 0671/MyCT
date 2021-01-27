@@ -76,7 +76,8 @@ def moduleRegister(args):
 		for _modulePath in args.pocmodule_path:
 			mInfo={}
 			mInfo['fullPath'] = _modulePath # 模块路径
-			mInfo['name'] = os.path.split(_modulePath)[1][:-3] # 模块名
+			mInfo['name'] = _modulePath[len(paths['POCMODULE_PATH'])+1:-3] #  模块名,更为清晰
+			# mInfo['name'] = os.path.split(_modulePath)[1][:-3] # 模块名
 			conf['POCMODULES'].append(mInfo)
 	else:
 		msg='Too few options in [-m]'
@@ -88,6 +89,7 @@ def moduleRegister(args):
 		for _modulePath in args.premodule_path:
 			mInfo={}
 			mInfo['fullPath'] = _modulePath # 模块路径
+			mInfo['name'] = _modulePath[len(paths['PREMODULE_PATH']):-3].replace('\\','/') #  模块名,更为清晰
 			mInfo['name'] = os.path.split(_modulePath)[1][:-3] # 模块名
 			conf['PREMODULES'].append(mInfo)
 	else:

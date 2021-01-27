@@ -6,7 +6,10 @@ from lib.controller.coreengine import initCoreEngine,runCoreEngine
 from lib.core.static import OUTPUT_MODE,MODULE_TYPE,RETURN_STATUS
 from lib.core.setting import CLASSNAME,FUNCNAME
 from lib.core.common import threadLock,printMessage
-
+# 兼容python3
+import sys
+if sys.version[0]=='3':
+	from functools import reduce
 
 # 对需要重新加入目标队列的数据 进行处理
 @threadLock(lock=threading.Lock())
@@ -36,7 +39,7 @@ def successHandle(tgt,successInfo):
 	except Exception as e:
 		successInfo='The target [%s] detection result was successful, but an exception occurred when outputting more information.'%str(tgt)
 		logger.debug(successInfo)
-	stdMsg = "%s"%successInfo
+	stdMsg = "[!] %s"%successInfo
 	printMessage(stdMsg,'red',True) # 输出成功数据到命令行
 	if runtime['outputMode'] == OUTPUT_MODE.ALL:
 		fileMsg = "%-20s %s"%('['+str(tgt)+']',successInfo)

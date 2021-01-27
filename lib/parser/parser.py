@@ -7,6 +7,9 @@ from lib.core.data import logger
 from lib.parser.hander import concuNum,fileNameOfPocM,fileNameOfPreM,fileNameOfTgt,testFofa,myActionDebug
 from lib.core.static import CUSTOM_LOGGING
 from lib.core.setting import CONCURRENT_NUM
+# 兼容python3
+if sys.version[0]=='3':
+	from functools import reduce
 
 usage='''python MyCT.py [-eT|-eG] [-pm] [-m] [-iS|iF|-iN|-iR|-qF] [-o] [msic]
 
@@ -67,9 +70,12 @@ def parseArgs():
 		dest='target_iprange',metavar='IP-IP',
 		help='Load the target from the ip range (e.g 10.1.1.1-10.1.1.125)'
 		)
-	TARGET.add_argument('-qF',type=testFofa,
+	TARGET.add_argument('-qF',type=testFofa,nargs='?',const='',
 		dest='target_fofa',metavar='QUERY',
-		help='Query data from Fofa API (e.g domain="fofa.so")'
+		help='Query data from Fofa API (e.g thinkphp).'\
+		' If the query string contains the cmd special characters (eg. && ||), '\
+		'you should just use -qf (not query string). '\
+		'Later, MyCT will prompt you to enter the query string.'
 		)
 
 	# 输出结果参数组
@@ -104,7 +110,8 @@ def parseArgs():
 	# 如果命令行参数只有MyCT.py,则添加-h参数
 	if len(sys.argv)==1:
 		sys.argv.append('-h')
- 
+	sys_argv=reduce(lambda x,y:x+' '+y,sys.argv)
+	logger.log(CUSTOM_LOGGING.SUCCESS,'User typed: %s'%sys_argv)
 	# 解析命令行参数
 	args=ctParser.parse_args()
 	logger.log(CUSTOM_LOGGING.SUCCESS,'The parameters are parse successfully.\nParameters are as follows: \n[%s]'%args)

@@ -76,8 +76,10 @@ class c2Class(object):
 				# print(e)
 				returnData=target+'|'+self.rc_exception_name.search(str(e.__class__)).group()
 		else:
-			target='Bad_Url:'+target
-			returnData=target
+			returnData=[]
+			returnData.append('http://'+target)
+			# returnData.append('https://'+target)
+			status=-1
 		return status,returnData
 
 if __name__ == '__main__':

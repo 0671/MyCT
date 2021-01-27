@@ -4,7 +4,10 @@ import argparse
 from lib.core.log import DEBUG
 from lib.core.setting import API_KEY
 from lib.core.data import paths
-
+# 兼容python3
+import sys
+if sys.version[0]=='3':
+	raw_input=input
 
 # 并发数是否在一定范围
 def concuNum(_str):
@@ -50,14 +53,17 @@ def testFofa(_str):
 	key=API_KEY['Fofa']['key']
 	url="https://fofa.so/api/v1/info/my?email=%s&key=%s"%(email,key)
 	import requests,json
-	resp=requests.get(url)
+	resp=requests.get(url,verify=False,timeout=5)
 	authData=json.loads(resp.content)
 	if 'error' in authData:
-		errMsg="FOFA API is not available. Please check the FOFA configuration(email,key) located in lib/code/setting.py"
+		errMsg="FOFA API is not available. Please check the FOFA configuration(email,key) in lib/code/setting.py"
 		raise argparse.ArgumentTypeError(errMsg)
 	if authData['isvip'] == False and authData['fcoin']==0:
 		errMsg="FOFA API is not available. Because you are no VIP users and FOFA coin is not enough!"
 		raise argparse.ArgumentTypeError(errMsg)
+	if query=='':
+		_q=raw_input("Please input complex Fofa query: ")
+		query=_q
 	return query
 
 # 自定义一个Action类

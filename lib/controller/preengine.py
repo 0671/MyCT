@@ -21,14 +21,14 @@ def retryHandle(retryInfo):
 def failHandle(failInfo):
 	pass
 
-# 对需要成功的数据 进行处理
+# 对成功的数据 进行处理
 @threadLock(lock=threading.Lock())
 def successHandle(tgt,successInfo):
 	try:
 		if isinstance(successInfo, str):
 			runtime['allResult'].add(successInfo) # 加操作
 		elif isinstance(successInfo, list):
-			successInfo=map(str,successInfo)
+			successInfo=list(map(str,successInfo)) # map函数的返回结果在py2下是list,而在py3下是map，所以这里直接再套个list
 			runtime['allResult'].update(set(successInfo)) # 并操作
 		else:
 			successInfo=str(successInfo)

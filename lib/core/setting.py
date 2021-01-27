@@ -8,7 +8,10 @@ MAIL = 'h.vi@qq.com'
 PLATFORM = os.name
 LICENS = 'GPLv2'
 
-IS_WIN = subprocess.mswindows
+try:
+	IS_WIN = subprocess.mswindows
+except:
+	IS_WIN = subprocess._mswindows
 ISCALLGRAPH = True # 是否生成程序的函数调用图.注意：在协程模式下不支持！
 
 # 并发模块类名 与 类中的并发函数
@@ -28,7 +31,7 @@ RELATIVE_PATH = {
 # 使用API所需要的数据
 API_KEY= {
 	'Fofa':{
-	'email':'xxx@email.com',
+	'email':'xxxxxxxx',
 	'key':'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 	'size':100 # 【普通会员】免费前100条/次 【高级会员】免费前10000条/次 【企业会员】免费前100,000条/次 check in https://fofa.so/static_pages/vip
 	}

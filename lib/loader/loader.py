@@ -50,7 +50,11 @@ def loadTarget():
 	def _fofa(): # 从Fofa API查询，获取目标
 		import requests,json,base64
 		query=conf['TARGET']
-		qbase64=base64.b64encode(query)
+		# 兼容py2与py3
+		if sys.version[0]=='3':
+			qbase64 = base64.b64encode(query.encode('utf-8')).decode("utf-8")
+		elif sys.version[0]=='2':
+			qbase64=base64.b64encode(query)
 		email=API_KEY['Fofa']['email']
 		key=API_KEY['Fofa']['key']
 		size=API_KEY['Fofa']['size']
@@ -62,6 +66,7 @@ def loadTarget():
 				raise Exception(queryResults['errmsg'])
 			server=[i[0] for i in queryResults['results']] # [u'vulfocus.fofa.so', u'https://www.fofa.so']
 			for s in server:
+				# print(s)
 				prepare['allTarget'].add(s)
 		except Exception as e:
 			errMsg = "Query api data occur exception. Exception :%s"%e
@@ -82,10 +87,13 @@ def _loadModule(mType,mList,mNum): # mType:模块类型 mList:模块信息列表
 		infoMsg = 'Start to load the module : %s'%mName
 		logger.log(CUSTOM_LOGGING.INFO,infoMsg)
 		# 寻找模块
-		filehandle,pathname,description = imp.find_module(mName,[os.path.dirname(mFullPath),])
+		# print(mName)
+		mDir,mOriname=os.path.split(mFullPath) # ('D:\\MyCT\\pocmodules\\jumpserver', '20210115.py')
+		mOriname=mOriname[:-3] # 20210115
+		filehandle,pathname,description = imp.find_module(mOriname,[mDir,])
 		try:
 			# 导入模块
-			mObj = imp.load_module(mName,filehandle,pathname,description)
+			mObj = imp.load_module(mOriname,filehandle,pathname,description)
 			# 检查模块中必须存在的类CLASSNAME与方法FUNCNAME
 			if not hasattr(mObj,CLASSNAME):
 				errMsg = "Can't be found the concurrency class : '%s' in current module [%s]"%(CLASSNAME,mName)
