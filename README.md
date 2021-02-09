@@ -1,4 +1,4 @@
-·# MyCT(My *Concurrent Toolkit*) <img src="https://github.com/0671/MyCT/blob/main/docx/ico.png" width="100px" /> 
+# MyCT(My *Concurrent Toolkit*) <img src="https://github.com/0671/MyCT/blob/main/docx/ico.png" width="100px" /> 
 
 [![Python 2.7](https://github.com/0671/MyCT/blob/main/docx/python-2.7-green.svg)](https://www.python.org/) [![License](https://github.com/0671/MyCT/blob/main/docx/license-GPLv2-red.svg)](https://github.com/0671/MyCT/blob/main/docx/LICENSE.txt)   
 基于**Xyntax的[POC-T](https://github.com/Xyntax/POC-T)** 进行个人重构。
